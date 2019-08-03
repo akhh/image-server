@@ -20,11 +20,13 @@ var path = require("path"),
     let { url } = req.query;
 
     // 1. validate the image_url query
-    if (!url) {
-      res.status(422).send("Please provide a URL");
-    }
+    // if (!url) {
+    //   res.status(422).send("Please provide a URL");
+    //}
     // 2. call filterImageFromURL(image_url) to filter the image
-    const result: string = await filterImageFromURL(url);
+    const result: string = await filterImageFromURL(
+      "https://udagram-kleine-dev.s3.eu-west-1.amazonaws.com/170830_BER_Home_Header_Visual_individuell.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA4MFNVBNRREMZJUO2%2F20190803%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20190803T184534Z&X-Amz-Expires=300&X-Amz-Signature=c36686d78c12a41274b4db7b1a107a0f470c9f2a2d4a5d7e00583c27746a61c7&X-Amz-SignedHeaders=host"
+    );
 
     // 3. send the resulting file in the response
     res.status(200).sendFile(result);
