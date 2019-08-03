@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import { filterImageFromURL, deleteLocalFiles } from "./util/util";
+var path = require("path"),
+  fs = require("fs");
 
 (async () => {
   // Init the Express application
@@ -14,8 +16,29 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
 
   app.get("/", async (req: Request, res: Response) => {
     let { url } = req.query;
-    const result = await filterImageFromURL(url);
+
+    if (!url) {
+      res.status(422).send("Please provide a URL");
+    }
+    const result: string = await filterImageFromURL(url);
     res.status(200).sendFile(result);
+
+    // Scan TMP Folder & delete Files
+
+    const directoryPath = path.join(__dirname, "/util/tmp/");
+    fs.readdir(directoryPath, (err: string, files: Array<string>) => {
+      if (err) {
+        return console.log("Unable to scan directory: " + err);
+      }
+
+      let filesToDelete: Array<string> = [];
+
+      files.forEach(function(file: string) {
+        filesToDelete.push(directoryPath + file);
+      });
+
+      deleteLocalFiles(filesToDelete);
+    });
   });
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
