@@ -1,6 +1,8 @@
 import fs from "fs";
 import Jimp = require("jimp");
 
+import { NextFunction } from "connect";
+
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
 // returns the absolute path to the local image
@@ -32,4 +34,29 @@ export async function deleteLocalFiles(files: Array<string>) {
   for (let file of files) {
     fs.unlinkSync(file);
   }
+}
+
+export async function requireAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  return next();
+  // if (!req.headers || !req.headers.authorization) {
+  //   return res.status(401).send({ message: "No authorization headers." });
+  // }
+
+  // const token_bearer = req.headers.authorization.split(' ');
+  // if(token_bearer.length != 2){
+  //     return res.status(401).send({ message: 'Malformed token.' });
+  // }
+
+  // const token = token_bearer[1];
+
+  // return jwt.verify(token, "hello", (err, decoded) => {
+  //   if (err) {
+  //     return res.status(500).send({ auth: false, message: 'Failed to authenticate.' });
+  //   }
+  //   return next();
+  // });
 }
