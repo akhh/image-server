@@ -16,7 +16,7 @@ var path = require("path"),
   app.use(bodyParser.json());
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
-  app.get("/", async (req: Request, res: Response) => {
+  app.get("/image/", async (req: Request, res: Response) => {
     let { url } = req.query;
 
     // 1. validate the image_url query
